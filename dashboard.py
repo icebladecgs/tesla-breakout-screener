@@ -60,6 +60,8 @@ st.markdown("""
 def run_analysis(event_types: tuple, force_refresh: bool = False) -> pd.DataFrame:
     data        = load_all(force_refresh=force_refresh)
     tsla        = data.get(config.TSLA_TICKER)
+    if tsla is None or tsla.empty:
+        raise RuntimeError("TSLA_RATE_LIMITED")
     events      = detect_events(tsla)
     event_dates = get_event_dates(events, event_types=list(event_types))
     results     = run_screener(data, event_dates)
@@ -136,10 +138,16 @@ if run_btn or refresh_btn or st.session_state["ranked"] is None:
         run_analysis.clear()
 
     with st.spinner("데이터 로딩 및 분석 중..."):
-        ranked, tsla, n_events = run_analysis(
-            event_types=tuple(selected_events),
-            force_refresh=force,
-        )
+        try:
+            ranked, tsla, n_events = run_analysis(
+                event_types=tuple(selected_events),
+                force_refresh=force,
+            )
+        except RuntimeError as e:
+            if "TSLA_RATE_LIMITED" in str(e):
+                st.error("⚠️ Yahoo Finance 요청 한도 초과 — 1~2분 후 '↺ 갱신' 버튼을 눌러주세요.")
+                st.stop()
+            raise
     st.session_state["ranked"]   = ranked
     st.session_state["tsla"]     = tsla
     st.session_state["n_events"] = n_events

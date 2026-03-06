@@ -4,6 +4,7 @@
 
 import os
 import pickle
+import time
 from datetime import datetime, timedelta
 
 import pandas as pd
@@ -87,5 +88,6 @@ def load_all(tickers: list[str] = None,
         df = load_ticker(t, force_refresh=force_refresh)
         if not df.empty:
             data[t] = df
+        time.sleep(0.15)  # rate limit 방지
     print(f"\nLoaded {len(data)}/{len(tickers)} tickers successfully.\n")
     return data
