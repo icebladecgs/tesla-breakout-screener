@@ -24,7 +24,7 @@ st.set_page_config(
     page_title="Tesla Breakout Companion Screener",
     page_icon="⚡",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 # ── CSS ──────────────────────────────────────────────────────
@@ -48,6 +48,30 @@ st.markdown("""
         font-weight:bold; margin-right:6px;
     }
     [data-testid="stSidebar"] { background-color: #111827; }
+
+    /* ── 모바일 반응형 ──────────────────────────────────── */
+    @media screen and (max-width: 768px) {
+        .main-title { font-size: 18px !important; }
+        .sub-title  { font-size: 11px !important; }
+
+        /* 모든 컬럼 블록을 세로로 쌓기 */
+        [data-testid="stHorizontalBlock"] {
+            flex-direction: column !important;
+        }
+        [data-testid="column"] {
+            width: 100% !important;
+            flex: none !important;
+            min-width: 100% !important;
+        }
+
+        /* 테이블 폰트 작게 */
+        [data-testid="stDataFrame"] {
+            font-size: 11px !important;
+        }
+
+        /* 사이드바 버튼 크게 */
+        [data-testid="stSidebarNav"] { display: none; }
+    }
 </style>
 """, unsafe_allow_html=True)
 
