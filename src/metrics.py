@@ -15,7 +15,7 @@ import config
 # 1. Forward-return reaction after TSLA events
 # ────────────────────────────────────────────────────────────
 
-def _forward_return(close: pd.Series, date, window: int) -> float | None:
+def _forward_return(close: pd.Series, date, window: int):
     """Return from `date` close to `date + window` bars close."""
     try:
         idx = close.index.get_loc(date)
@@ -30,8 +30,9 @@ def _forward_return(close: pd.Series, date, window: int) -> float | None:
 def compute_event_reactions(ticker_close: pd.Series,
                              tsla_close: pd.Series,
                              event_dates: pd.DatetimeIndex,
-                             windows: list[int] = config.FORWARD_WINDOWS
-                             ) -> pd.DataFrame:
+                             windows=None) -> pd.DataFrame:
+    if windows is None:
+        windows = config.FORWARD_WINDOWS
     """
     For each event date, compute forward returns for ticker and TSLA.
     Returns a DataFrame rows=event_dates, cols=window labels.
@@ -54,8 +55,9 @@ def compute_event_reactions(ticker_close: pd.Series,
     return pd.DataFrame(records).set_index("date")
 
 
-def summarise_reactions(reactions: pd.DataFrame,
-                        windows: list[int] = config.FORWARD_WINDOWS) -> dict:
+def summarise_reactions(reactions: pd.DataFrame, windows=None) -> dict:
+    if windows is None:
+        windows = config.FORWARD_WINDOWS
     """Aggregate reaction stats across all event dates."""
     summary = {}
     for w in windows:
@@ -80,7 +82,9 @@ def summarise_reactions(reactions: pd.DataFrame,
 
 def compute_correlation(ticker_close: pd.Series,
                          tsla_close: pd.Series,
-                         windows: list[int] = config.CORR_WINDOWS) -> dict:
+                         windows=None) -> dict:
+    if windows is None:
+        windows = config.CORR_WINDOWS
     """Rolling correlation at the END of the series (current snapshot)."""
     t_ret  = ticker_close.pct_change().dropna()
     ts_ret = tsla_close.pct_change().dropna()
@@ -201,8 +205,7 @@ def compute_setup_score(df: pd.DataFrame) -> dict:
 # 4. Liquidity Score
 # ────────────────────────────────────────────────────────────
 
-def compute_liquidity_score(df: pd.DataFrame,
-                             universe_data: dict[str, pd.DataFrame]) -> float:
+def compute_liquidity_score(df: pd.DataFrame, universe_data) -> float:
     """
     Returns 0-100 based on average daily dollar volume relative to universe.
     Uses log-normalisation across the universe.

@@ -57,7 +57,7 @@ def detect_events(tsla: pd.DataFrame) -> pd.DataFrame:
 
 
 def get_event_dates(events: pd.DataFrame,
-                    event_types: list[str] = None,
+                    event_types=None,
                     min_gap_days: int = 5) -> pd.DatetimeIndex:
     """
     Return dates where at least one of the specified event types occurred.

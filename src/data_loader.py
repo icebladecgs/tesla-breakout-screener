@@ -75,8 +75,7 @@ def load_ticker(ticker: str, years: int = config.YEARS_HISTORY,
         return pd.DataFrame()
 
 
-def load_all(tickers: list[str] = None,
-             force_refresh: bool = False) -> dict[str, pd.DataFrame]:
+def load_all(tickers=None, force_refresh: bool = False):
     """Download TSLA + all candidate tickers. Returns {ticker: DataFrame}."""
     if tickers is None:
         tickers = [config.TSLA_TICKER] + config.CANDIDATE_TICKERS

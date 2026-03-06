@@ -18,7 +18,7 @@ def _minmax(series: pd.Series) -> pd.Series:
     return (series - mn) / (mx - mn) * 100
 
 
-def compute_total_scores(results: list[dict]) -> pd.DataFrame:
+def compute_total_scores(results) -> pd.DataFrame:
     """
     Takes a list of per-ticker dicts (output of screener.py) and returns
     a ranked DataFrame with Total_Score.

@@ -18,7 +18,7 @@ from src.metrics import (
 def analyse_ticker(ticker: str,
                    df: pd.DataFrame,
                    tsla: pd.DataFrame,
-                   event_dates: pd.DatetimeIndex) -> dict | None:
+                   event_dates: pd.DatetimeIndex):
     """
     Full analysis for a single candidate ticker.
     Returns a dict of metrics, or None if data is insufficient.
@@ -68,8 +68,7 @@ def analyse_ticker(ticker: str,
     return result
 
 
-def run_screener(data: dict[str, pd.DataFrame],
-                 event_dates: pd.DatetimeIndex) -> list[dict]:
+def run_screener(data, event_dates):
     """
     Runs analyse_ticker() for every candidate and returns a list of result dicts.
     """
