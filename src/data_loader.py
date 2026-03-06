@@ -48,14 +48,21 @@ def load_ticker(ticker: str, years: int = config.YEARS_HISTORY,
     start = (datetime.now() - timedelta(days=365 * years)).strftime("%Y-%m-%d")
     print(f"  Downloading {ticker} ...", end=" ", flush=True)
     try:
-        df = yf.download(ticker, start=start, auto_adjust=True, progress=False)
-        if df.empty:
+        df = yf.download(ticker, start=start, auto_adjust=True,
+                         progress=False, multi_level_index=False)
+        if df is None or df.empty:
             print("NO DATA")
             return pd.DataFrame()
         # Flatten MultiIndex columns if present
         if isinstance(df.columns, pd.MultiIndex):
             df.columns = df.columns.get_level_values(0)
-        df = df[["Open", "High", "Low", "Close", "Volume"]].copy()
+        # Normalize column names
+        df.columns = [c.capitalize() if isinstance(c, str) else c for c in df.columns]
+        needed = [c for c in ["Open", "High", "Low", "Close", "Volume"] if c in df.columns]
+        if "Close" not in needed:
+            print("NO CLOSE COLUMN")
+            return pd.DataFrame()
+        df = df[needed].copy()
         df.index = pd.to_datetime(df.index)
         df.sort_index(inplace=True)
         with open(path, "wb") as f:

@@ -1,8 +1,8 @@
-pandas>=2.0.0
-numpy>=1.24.0
-yfinance>=0.2.40
-scipy>=1.11.0
-matplotlib>=3.7.0
-plotly>=5.15.0
-requests>=2.31.0
+pandas==2.2.3
+numpy==1.26.4
+yfinance==0.2.51
+scipy==1.13.1
+matplotlib==3.9.0
+plotly==5.22.0
+requests==2.32.3
 streamlit>=1.30.0
