@@ -6,7 +6,7 @@ import os
 
 # ── Data Settings ────────────────────────────────────────────
 TSLA_TICKER = "TSLA"
-YEARS_HISTORY = 10          # years of historical data to download
+YEARS_HISTORY = 5           # years of historical data to download
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "output")
 
